@@ -55,7 +55,7 @@ void Timer32_1_Init(void(*task)(void), unsigned long period, enum timer32divider
 	
 	// timer reload value
 	// TIMER32_LOAD1
-  TIMER32_LOAD1 =  (1/timer1Period)/(0.5);  
+  TIMER32_LOAD1 =  (period);  
 	
 	// clear Timer32 Timer 1 interrupt
 	// TIMER32_INTCLR1
@@ -72,7 +72,10 @@ void Timer32_1_Init(void(*task)(void), unsigned long period, enum timer32divider
   // bit0,             1=one shot mode, 0=wrapping mode
 	
 	// TIMER32_CONTROL1, enable, periodic, 32 bit counter
-  TIMER32_CONTROL1 = 0b11000110;
+	//e2
+	TIMER32_CONTROL1 = 0b11100010;
+	TIMER32_CONTROL1 |= div;
+  //TIMER32_CONTROL1 = 0b11000110;
 	
 	// interrupts enabled in the main program after all devices initialized
 	// NVIC_IPR6
@@ -143,7 +146,8 @@ void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider
   // bit0,             1=one shot mode, 0=wrapping mode
 	
   //TIMER32_CONTROL2   
-  TIMER32_CONTROL2 = 0b11000110;
+	TIMER32_CONTROL1 = 0b11100010;
+	TIMER32_CONTROL1 |= div;
 
 	// interrupts enabled in the main program after all devices initialized
   NVIC_IPR6 = (NVIC_IPR6&0xFFFF00FF)|0x00004000; // priority 2
