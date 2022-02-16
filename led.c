@@ -3,7 +3,11 @@
 #include<stdlib.h>
 #include <time.h>
 
+
 typedef unsigned char BOOLEAN;
+
+#define FALSE 0
+#define TRUE  !FALSE
 
 #define RED         BIT0  
 #define GREEN       BIT1
@@ -57,44 +61,59 @@ void LED2_Init(void)
  
 }
 
+int LED1_State(void){
+	if (P1->OUT & BIT0){
+		return TRUE;
+	}else{
+	return FALSE;
+	}
+}
+
 void LED1_On(void){
 	P1->OUT |= RED;
 }
 
 void LED1_Off(void){
-	P1->OUT $= ~RED;
+	P1->OUT &= ~RED;
 }
 
-void LED2_OFF(void){
+void LED2_Off(void){
 	P2->OUT &= ~RED;
 	P2->OUT &= ~GREEN;
 	P2->OUT &= ~BLUE;
 }
 void LED2_RED_ON(void){
+	LED2_Off();
 	P2->OUT |= RED;
 }
 void LED2_GREEN_ON(void){
+	LED2_Off();
 	P2->OUT |= GREEN;
 }
 void LED2_BLUE_ON(void){
+	LED2_Off();
 	P2->OUT |= BLUE;
 }
 void LED2_CYAN_ON(void){
+	LED2_Off();
 	P2->OUT |= GREEN;
 	P2->OUT |= BLUE;
 }
 
 void LED2_MAGENTA_ON(void){
+	LED2_Off();
 	P2->OUT |= GREEN;
 	P2->OUT |= BLUE;
 }
 
 void LED2_YELLOW_ON(void){
+	LED2_Off();
 	P2->OUT |= GREEN;
 	P2->OUT |= BLUE;
 }
 
 void LED2_WHITE_ON(void){
+	LED2_Off();
 	P2->OUT |= RED;
 	P2->OUT |= GREEN;
 	P2->OUT |= BLUE;

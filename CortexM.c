@@ -9,7 +9,7 @@
 // Inputs: none
 // Outputs: none
   __asm void
-  __weak DisableInterrupts(void)
+	__weak DisableInterrupts(void)
   {
     CPSID   I
     bx      lr

@@ -13,7 +13,7 @@
 #include "msp.h"
 #include "uart.h"
 #include "switches.h"
-#include "leds.h"
+#include "led.h"
 #include "Timer32.h"
 #include "CortexM.h"
 #include "Common.h"
@@ -24,7 +24,7 @@ BOOLEAN g_sendData = FALSE;
 uint16_t line[128];
 
 int colorIndex = 0;
-BYTE colors[7] = { RED, GREEN, BLUE, CYAN, MAGENTA, YELLOW, WHITE };
+//BYTE colors[7] = { RED, GREEN, BLUE, CYAN, MAGENTA, YELLOW, WHITE };
 
 BOOLEAN Timer1RunningFlag = FALSE;
 BOOLEAN Timer2RunningFlag = FALSE;
@@ -122,17 +122,59 @@ void PORT1_IRQHandler(void)
 	{
 		// acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1
 		// clear flag, acknowledge
-    ;     
+    P1->IFG &= ~BIT1;  
+		Timer1RunningFlag = !Timer1RunningFlag;
+		
+		
 
 
   }
 	// Now check to see if it came from Switch2 ?
+	//TODO
   if(P1->IFG & BIT4)
 	{
 		// acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
-    ;     // clear flag4, acknowledge
-
-  }
+    P1->IFG &= ~BIT4;      // clear flag4, acknowledge
+		//this part needs work
+		//Timer2RunningFlag = !Timer2RunningFlag;
+		
+		if(!Timer2RunningFlag){
+			colorIndex ++;
+			switch(colorIndex){
+				case 1:
+					LED2_RED_ON();
+					break;
+				case 2:
+					LED2_GREEN_ON();
+					break;
+				case 3:
+					LED2_BLUE_ON();
+					break;	
+				case 4:
+					LED2_CYAN_ON();
+					break;
+				case 5:
+					LED2_MAGENTA_ON();
+					break;
+				case 7:
+					LED2_YELLOW_ON();
+					break;
+				case 8:
+					LED2_WHITE_ON();
+				  colorIndex =0;
+					break;	
+			}
+		Timer2RunningFlag = TRUE;
+  }else{
+			
+			numSeconds = (float)MillisecondCounter;
+			Timer2RunningFlag = FALSE;
+			LED2_Off();
+			sprintf(temp, "The button was pressed for: %f seconds\r\n ", numSeconds);
+			uart0_put(temp);
+			MillisecondCounter=0;	
+		}	
+	}
 }
 
 //
@@ -142,13 +184,23 @@ void PORT1_IRQHandler(void)
 //
 void Timer32_1_ISR(void)
 {
-	if (LED1_State() == FALSE )
-	{
-		LED1_On();
+	uart0_put("inside of timer_32_1_ISR\r\n");
+	if(Timer1RunningFlag){
+		if ((LED1_State()) == FALSE )
+		{
+			LED1_On();
+			uart0_put("Turning ON led 1 from sw1 interupt\r\n");
+		}
+		else{
+			LED1_Off();
+			uart0_put("Turning OFF led 1 from sw1 interupt\r\n");
+		}	
+	}else{
+		//this led1_off ensures the led is turned off after the "second" button press
+		LED1_Off();
 	}
-	else LED1_Off();
-}
 
+}
 //
 // Interrupt Service Routine
 //
@@ -156,9 +208,10 @@ void Timer32_1_ISR(void)
 //
 void Timer32_2_ISR(void)
 {
-
+	uart0_put("inside of timer_32_2_ISR\r\n");
+	if(Timer2RunningFlag){
 		MillisecondCounter++;
-
+	}
 }
 
 
@@ -173,12 +226,12 @@ int main(void){
 	uart0_put("\r\nLab5 Timer demo\r\n");
 	// Set the Timer32-2 to 2Hz (0.5 sec between interrupts)
 	//Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1); // initialize Timer A32-1;
-        ;
+  Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1);
         
 	// Setup Timer32-2 with a .001 second timeout.
 	// So use DEFAULT_CLOCK_SPEED/(1/0.001) = SystemCoreClock/1000
 	//Timer32_2_Init(&Timer32_2_ISR, SystemCoreClock/1000, T32DIV1); // initialize Timer A32-1;
-	;
+	Timer32_2_Init(&Timer32_2_ISR, SystemCoreClock/1000, T32DIV1);
     
 	Switch1_Interrupt_Init();
 	Switch2_Interrupt_Init();

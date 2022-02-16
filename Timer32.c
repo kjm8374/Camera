@@ -73,7 +73,8 @@ void Timer32_1_Init(void(*task)(void), unsigned long period, enum timer32divider
 	
 	// TIMER32_CONTROL1, enable, periodic, 32 bit counter
 	//e2
-	TIMER32_CONTROL1 = 0b11100010;
+	//TIMER32_CONTROL1 = 0b11100010;
+	TIMER32_CONTROL1 |= 0xE2;
 	TIMER32_CONTROL1 |= div;
   //TIMER32_CONTROL1 = 0b11000110;
 	
@@ -83,7 +84,9 @@ void Timer32_1_Init(void(*task)(void), unsigned long period, enum timer32divider
 	
 	// enable interrupt 25 in NVIC, NVIC_ISER0
 	// NVIC_ISER0
-  NVIC_ISER0 |= BIT25;         
+	//using BIT 25 was giving errors, using hex instead
+  //NVIC_ISER0 |= BIT25; 
+	NVIC_ISER0 |= 0x2000000;
 
   EndCritical(sr);
 }
@@ -101,7 +104,7 @@ void T32_INT1_IRQHandler(void)
 	
 	// timer reload value to start the timer again
 	// TIMER32_LOAD1
-	TIMER32_LOAD1 =  (1/timer1Period)/(0.5);   
+	TIMER32_LOAD1 =  (timer1Period);   
 }
 
 // ***************** Timer32_2_Init ****************
@@ -129,7 +132,7 @@ void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider
 	
 	// timer reload value
 	// TIMER32_LOAD2
-  Timer32_LOAD2 = 0xFFFFFFFF;   
+  TIMER32_LOAD2 = timer2Period;   
 	
 	// clear Timer32 Timer 2 interrupt
 	// TIMER32_INTCLR2
@@ -146,15 +149,18 @@ void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider
   // bit0,             1=one shot mode, 0=wrapping mode
 	
   //TIMER32_CONTROL2   
-	TIMER32_CONTROL1 = 0b11100010;
-	TIMER32_CONTROL1 |= div;
+	TIMER32_CONTROL2 = 0xE2;
+	//TIMER32_CONTROL2 = 0b11100010;
+	TIMER32_CONTROL2 |= div;
 
 	// interrupts enabled in the main program after all devices initialized
   NVIC_IPR6 = (NVIC_IPR6&0xFFFF00FF)|0x00004000; // priority 2
 	
 	// enable interrupt 26 in NVIC, NVIC_ISER0
 	// NVIC_ISER0
-  NVIC_ISER0 |= BIT26;         
+	//using BIT 26 was giving errors, using hex instead
+  //NVIC_ISER0 |= BIT26; 
+	NVIC_ISER0 |= 4000000;
 
   EndCritical(sr);
 }
@@ -172,6 +178,6 @@ void T32_INT2_IRQHandler(void)
 	
 	// timer reload value
 	// TIMER32_LOAD2
-	TIMER32_LOAD2 = 0xFFFFFFFF;  
-
+	//TIMER32_LOAD2 = 0xFFFFFFFF;  
+	TIMER32_LOAD2 = timer2Period;
 }

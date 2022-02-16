@@ -21,3 +21,4 @@ void uart0_putchar(char ch);
  * @param ptr_str string to write
  */
 void uart0_put(char* ptr_str);
+//trying to see if gets rid of no new line warning

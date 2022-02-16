@@ -115,4 +115,3 @@ void uart0_put(char *ptr_str)
 	while(*ptr_str != 0)
 		uart0_putchar(*ptr_str++);
 }
-
