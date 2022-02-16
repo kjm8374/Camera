@@ -2,6 +2,7 @@
 *.uvprojx
 *.uvoptx
 *.uvguix
+*.scvd
 **/Listings
 **/Objects
 **/RTE
