@@ -149,7 +149,7 @@ void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider
   // bit0,             1=one shot mode, 0=wrapping mode
 	
   //TIMER32_CONTROL2   
-	TIMER32_CONTROL2 = 0xE2;
+	TIMER32_CONTROL2 |= 0xE2;
 	//TIMER32_CONTROL2 = 0b11100010;
 	TIMER32_CONTROL2 |= div;
 
@@ -177,7 +177,6 @@ void T32_INT2_IRQHandler(void)
   (*Timer32_2_PeriodicTask)();               
 	
 	// timer reload value
-	// TIMER32_LOAD2
-	//TIMER32_LOAD2 = 0xFFFFFFFF;  
+	// TIMER32_LOAD2  
 	TIMER32_LOAD2 = timer2Period;
 }

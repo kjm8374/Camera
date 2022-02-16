@@ -141,38 +141,44 @@ void PORT1_IRQHandler(void)
 		if(!Timer2RunningFlag){
 			colorIndex ++;
 			switch(colorIndex){
-				case 1:
+				case (1):
 					LED2_RED_ON();
 					break;
-				case 2:
+				case (2):
 					LED2_GREEN_ON();
 					break;
-				case 3:
+				case (3):
 					LED2_BLUE_ON();
 					break;	
-				case 4:
+				case (4):
 					LED2_CYAN_ON();
 					break;
-				case 5:
+				case (5):
 					LED2_MAGENTA_ON();
 					break;
-				case 7:
+				case (6):
 					LED2_YELLOW_ON();
 					break;
-				case 8:
+				case (7):
 					LED2_WHITE_ON();
-				  colorIndex =0;
-					break;	
+				  colorIndex = 0;
+					break;
+				default:
+					LED2_Off();
 			}
 		Timer2RunningFlag = TRUE;
   }else{
 			
 			numSeconds = (float)MillisecondCounter;
-			Timer2RunningFlag = FALSE;
 			LED2_Off();
-			sprintf(temp, "The button was pressed for: %f seconds\r\n ", numSeconds);
+			sprintf(temp, "The time between button presses was:");
+			uart0_put(temp);
+			sprintf(temp, " %f ", numSeconds);
+			uart0_put(temp);
+			sprintf(temp, " seconds\r\n");
 			uart0_put(temp);
 			MillisecondCounter=0;	
+		  Timer2RunningFlag = FALSE;
 		}	
 	}
 }

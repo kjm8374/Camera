@@ -1,24 +1,18 @@
-typedef unsigned char BYTE;
-/**
- * Initialize the UART
- */
+#ifndef __UART_H_   /* Include guard */
+#define __UART_H_
+
+#include "Common.h"
+
 void uart0_init(void);
-
-/**
- * Read a byte from the UART Rx
- * @return the character recieved
- */
 BYTE uart0_getchar(void);
-
-/**
- * Write a character to the UART Tx
- * @param ch character write
- */
+BOOLEAN uart0_dataAvailable(void);
 void uart0_putchar(char ch);
+void uart0_put(char *ptr_str);
+void uart2_init(void);
+BYTE uart2_getchar(void);
+BOOLEAN uart2_dataAvailable(void);
+void uart2_putchar(char ch);
+void uart2_put(char *ptr_str);
 
-/**
- * Write a standard C string to the UART Tx line
- * @param ptr_str string to write
- */
-void uart0_put(char* ptr_str);
-//trying to see if gets rid of no new line warning
+#endif // __UART_H_
+

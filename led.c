@@ -45,7 +45,7 @@ void LED2_Init(void)
 	P2->SEL1 &= ~BLUE;
 
 	// make built-in LED2 LEDs high drive strength
-	P2->DS &= RED;
+	P2->DS |= RED;
 	P2->DS |= GREEN;
 	P2->DS |= BLUE;
 
@@ -65,7 +65,7 @@ int LED1_State(void){
 	if (P1->OUT & BIT0){
 		return TRUE;
 	}else{
-	return FALSE;
+		return FALSE;
 	}
 }
 
@@ -83,37 +83,39 @@ void LED2_Off(void){
 	P2->OUT &= ~BLUE;
 }
 void LED2_RED_ON(void){
-	LED2_Off();
 	P2->OUT |= RED;
+	P2->OUT &= ~GREEN;
+	P2->OUT &= ~BLUE;
 }
 void LED2_GREEN_ON(void){
-	LED2_Off();
+	P2->OUT &= ~RED;
 	P2->OUT |= GREEN;
+	P2->OUT &= ~BLUE;
 }
 void LED2_BLUE_ON(void){
-	LED2_Off();
+	P2->OUT &= ~RED;
+	P2->OUT &= ~GREEN;
 	P2->OUT |= BLUE;
 }
 void LED2_CYAN_ON(void){
-	LED2_Off();
+	P2->OUT &= ~RED;
 	P2->OUT |= GREEN;
 	P2->OUT |= BLUE;
 }
 
 void LED2_MAGENTA_ON(void){
-	LED2_Off();
-	P2->OUT |= GREEN;
+	P2->OUT |= RED;
+	P2->OUT &= ~GREEN;
 	P2->OUT |= BLUE;
 }
 
 void LED2_YELLOW_ON(void){
-	LED2_Off();
+	P2->OUT |= RED;
 	P2->OUT |= GREEN;
-	P2->OUT |= BLUE;
+	P2->OUT &= ~BLUE;
 }
 
 void LED2_WHITE_ON(void){
-	LED2_Off();
 	P2->OUT |= RED;
 	P2->OUT |= GREEN;
 	P2->OUT |= BLUE;
