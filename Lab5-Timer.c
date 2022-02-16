@@ -171,11 +171,12 @@ void PORT1_IRQHandler(void)
 			
 			numSeconds = (float)MillisecondCounter;
 			LED2_Off();
-			sprintf(temp, "The time between button presses was:");
+			sprintf(temp, "The button was pressed for:");
 			uart0_put(temp);
-			sprintf(temp, " %f ", numSeconds);
+			//sprintf(temp, " %f ", numSeconds);
+			sprintf(temp, " %lu ", MillisecondCounter);
 			uart0_put(temp);
-			sprintf(temp, " seconds\r\n");
+			sprintf(temp, " milli seconds\r\n");
 			uart0_put(temp);
 			MillisecondCounter=0;	
 		  Timer2RunningFlag = FALSE;
@@ -190,7 +191,7 @@ void PORT1_IRQHandler(void)
 //
 void Timer32_1_ISR(void)
 {
-	uart0_put("inside of timer_32_1_ISR\r\n");
+	//uart0_put("inside of timer_32_1_ISR\r\n");
 	if(Timer1RunningFlag){
 		if ((LED1_State()) == FALSE )
 		{
@@ -214,7 +215,7 @@ void Timer32_1_ISR(void)
 //
 void Timer32_2_ISR(void)
 {
-	uart0_put("inside of timer_32_2_ISR\r\n");
+	//uart0_put("in timer_32_2_ISR\r\n");
 	if(Timer2RunningFlag){
 		MillisecondCounter++;
 	}

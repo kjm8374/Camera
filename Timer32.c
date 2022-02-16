@@ -136,7 +136,7 @@ void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider
 	
 	// clear Timer32 Timer 2 interrupt
 	// TIMER32_INTCLR2
-  TIMER32_INTCLR2 = 0xFFFFFFFF;   
+  TIMER32_INTCLR2 = 1;   
 
   
   // bits31-8=X...X,   reserved
@@ -160,7 +160,7 @@ void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider
 	// NVIC_ISER0
 	//using BIT 26 was giving errors, using hex instead
   //NVIC_ISER0 |= BIT26; 
-	NVIC_ISER0 |= 4000000;
+	NVIC_ISER0 |= 0x4000000;
 
   EndCritical(sr);
 }
