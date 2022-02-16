@@ -15,3 +15,4 @@ void uart2_putchar(char ch);
 void uart2_put(char *ptr_str);
 
 #endif // __UART_H_
+
