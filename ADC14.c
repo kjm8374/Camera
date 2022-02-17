@@ -24,7 +24,7 @@ void ADC0_InitSWTriggerCh6(void)
 {
 	// wait for reference to be idle
 	// REF_A->CTL0
-  ;       
+  while((REF_A->CTL0 & 0x1000) == 0){};       
 		
 	// set reference voltage to 2.5V
 	// 1) configure reference for static 2.5V
@@ -37,7 +37,7 @@ void ADC0_InitSWTriggerCh6(void)
 
 	// 2) ADC14ENC = 0 to allow programming
 	// ADC14->CTL0
-  ;        
+  ADC14->CTL0 |= 0x00000002;        
 
 	// 3) wait for BUSY to be zero		
 	// ADC14->CTL0
@@ -68,7 +68,7 @@ void ADC0_InitSWTriggerCh6(void)
 	// ------------------------------------------------------------------
 	// 4) single, SMCLK, on, disabled, /1, 32 clocks, SHM	pulse-mode
 	// ADC14->CTL0
-  ;       
+  ADC14->CTL0 = 0x04203310;       
 	
 	
 	
@@ -83,7 +83,7 @@ void ADC0_InitSWTriggerCh6(void)
 	//
 	// 5) ADC14MEM0, 14-bit, ref on, regular power
 	// ADC14->CTL1
-  ;          
+  ADC14->CTL1 = 0x00000030;          
 		
 		
 
@@ -104,23 +104,24 @@ void ADC0_InitSWTriggerCh6(void)
   // 7    ADC14EOS    End of sequence         1b = End of sequence
   // 6-5  reserved                           00b (reserved)
   // 4-0  ADC14INCHx  Input channel        0110b = A6, P4.7
-	
+
 	// 7) no interrupts
 	// ADC14->IER0
 	// ADC14->IER1
-  ;                     
-  ;                     // no interrupts
+  ADC14->IER0 = 0x00000000;                     
+  ADC14->IER1 = 0x00000000;                     // no interrupts
 	//
 	// P4.7 is Analog In A6
 	// 8) analog mode on A6, P4.7
 	// set pins for ADC A6
 	// SEL0, SEL1
-  ;                  
+  //P4->DIR = ;
+  //P4->MAP7 = PM_ANALOG;                  
   ;
 	
 	// 9) enable
 	// ADC14->CTL0
-  ;         
+  ADC14->CTL0 |= 0x00000002;         
 }
 
 
