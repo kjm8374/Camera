@@ -51,6 +51,44 @@ void Timer32_1_ISR(void)
 		uart0_put(temp);
 	}
 }
+
+void Switch1_Interrupt_Init(void)
+{
+	// disable interrupts
+	DisableInterrupts();
+	// initialize the Switch as per previous lab
+	Switch1_Init();
+	
+	//7-0 PxIFG RW 0h Port X interrupt flag
+	//0b = No interrupt is pending.
+	//1b = Interrupt is pending.
+	// clear flag1 (reduce possibility of extra interrupt)	
+  P1->IFG &= ~BIT1;
+
+	//7-0 PxIE RW 0h Port X interrupt enable
+	//0b = Corresponding port interrupt disabled
+	//1b = Corresponding port interrupt enabled	
+	// arm interrupt on  P1.1	
+  P1->IE |= BIT1;  
+
+	//7-0 PxIES RW Undefined Port X interrupt edge select
+  //0b = PxIFG flag is set with a low-to-high transition.
+  //1b = PxIFG flag is set with a high-to-low transition
+	// now set the pin to cause falling edge interrupt event
+	// P1.1 is falling edge event
+  P1->IES |= BIT1; 
+	
+	// now set the pin to cause falling edge interrupt event
+  NVIC_IPR8 = (NVIC_IPR8 & 0x00FFFFFF)|0x40000000; // priority 2
+	
+	// enable Port 1 - interrupt 35 in NVIC	
+  NVIC_ISER1 = 0x00000008;  
+	
+	// enable interrupts  (// clear the I bit	)
+  EnableInterrupts();              
+	
+}
+
 // Interrupt Service Routine
 void Timer32_2_ISR(void)
 {
@@ -65,12 +103,14 @@ int main(void)
 	//initializations
 	uart0_init();
 	uart0_put("\r\nLab5 ADC demo\r\n");
+	
+	Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1);
 
 	
 
 	LED1_Init();
 	//LED2_Init();
-	Switch1_Init();
+	Switch1_Interrupt_Init();
 	ADC0_InitSWTriggerCh6();
 	EnableInterrupts();
   while(1)
