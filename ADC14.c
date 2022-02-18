@@ -116,7 +116,8 @@ void ADC0_InitSWTriggerCh6(void)
 	// set pins for ADC A6
 	// SEL0, SEL1
   P4->DIR &= ~BIT7;
-  P4->SEL0 &= ~BIT7;
+	P4->REN &= ~BIT7;
+  P4->SEL0 |= BIT7;
 	P4->SEL1 |= BIT7;
   P4MAP->PMAP_REGISTER7 = PM_ANALOG;                   
 
