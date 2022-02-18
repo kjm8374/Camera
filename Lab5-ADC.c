@@ -28,8 +28,17 @@ BOOLEAN Timer2RunningFlag = FALSE;
 
 unsigned long MillisecondCounter = 0;
 
-
-
+void PORT1_IRQHandler(void)
+{
+	// First we check if it came from Switch1 ?
+  if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
+	{
+		// acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1
+		// clear flag, acknowledge
+    P1->IFG &= ~BIT1;  
+		Timer1RunningFlag = !Timer1RunningFlag;
+	}
+}	
 // Interrupt Service Routine for Timer32-1
 void Timer32_1_ISR(void)
 {
