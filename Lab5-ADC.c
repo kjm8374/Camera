@@ -12,7 +12,7 @@
 
 #include "msp.h"
 #include "uart.h"
-#include "leds.h"
+#include "led.h"
 #include "switches.h"
 #include "Timer32.h"
 #include "CortexM.h"
@@ -33,7 +33,14 @@ unsigned long MillisecondCounter = 0;
 // Interrupt Service Routine for Timer32-1
 void Timer32_1_ISR(void)
 {
-
+	char temp[64];
+	unsigned int analogIn = 0;
+	if(Timer1RunningFlag)
+	{
+		analogIn = ADC_In();
+		sprintf(temp,"\r\nDecimal: %d",analogIn);
+		uart0_put(temp);
+	}
 }
 // Interrupt Service Routine
 void Timer32_2_ISR(void)
@@ -46,8 +53,6 @@ void Timer32_2_ISR(void)
 // main
 int main(void)
 {
-	char temp[64];
-	unsigned int analogIn = 0;
 	//initializations
 	uart0_init();
 	uart0_put("\r\nLab5 ADC demo\r\n");
@@ -55,13 +60,13 @@ int main(void)
 	
 
 	LED1_Init();
-	LED2_Init();
-	Switch2_Init();
+	//LED2_Init();
+	Switch1_Init();
 	ADC0_InitSWTriggerCh6();
 	EnableInterrupts();
   while(1)
 	{
-		;
+		WaitForInterrupt();
 		
   }
 }
