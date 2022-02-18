@@ -39,8 +39,8 @@ void ADC0_InitSWTriggerCh6(void)
 	// ADC14->CTL0
 	//REF_A->CTL0 &= ~BIT0; 
 	//REF_A->CTL0 &= ~BIT1; 
-	REF_A->CTL0 &= BIT1; 
-	//ADC14->CTL0 &= ~BIT1; 	
+	//REF_A->CTL0 &= BIT1; 
+	ADC14->CTL0 &= ~BIT1; 	
   //ADC14->CTL0 |= 0x00000002;        
 
 	// 3) wait for BUSY to be zero		
