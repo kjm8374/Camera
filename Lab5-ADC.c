@@ -47,7 +47,7 @@ void Timer32_1_ISR(void)
 	if(Timer1RunningFlag)
 	{
 		analogIn = ADC_In();
-		sprintf(temp,"\r\nDecimal: %d",analogIn);
+		sprintf(temp,"\r\nDecimal: %u",analogIn);
 		uart0_put(temp);
 	}
 }
