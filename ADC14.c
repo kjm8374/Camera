@@ -121,9 +121,12 @@ void ADC0_InitSWTriggerCh6(void)
 	// set pins for ADC A6
 	// SEL0, SEL1
   P4->SEL0 |= BIT7;
-	P4->SEL1 &= ~BIT7;                  
+	P4->SEL1 |= BIT7;                  
   P4->DIR &= ~BIT7;
 	P4->REN &= ~BIT7;
+	PMAPKEYID = 0x02D52;
+	PMAPCTL |= 0x0002;
+	P4MAP->PMAP_REGISTER7 = PM_ANALOG;
 	//bit 1 is 0x0002
   ADC14->CTL0 |= BIT1;         
 
@@ -149,8 +152,8 @@ unsigned int  ADC_In(void)
 
 	// 3) wait for ADC14->IFGR0, ADC14->IFGR0 bit 0 is set when conversion done
 	// ADC14->IFGR0
-	while(ADC14->IFGR0 & ~BIT0){}; 
-	//while((ADC14->IFGR0 & BIT0) == 0){};   
+	//while(ADC14->IFGR0 & BIT0){}; 
+	while(!(ADC14->IFGR0 & BIT0)){};   
 		
 	// 14 bit sample returned  ADC14->MEM[0]
 	// ADC14->MEM[0] 14-bit conversion in bits 13-0 (31-16 undefined, 15-14 zero)

@@ -44,11 +44,25 @@ void Timer32_1_ISR(void)
 {
 	char temp[64];
 	unsigned int analogIn = 0;
+	double voltage = 0.0;
+	double temperatureC = 0.0;
+	double temperatureF = 0.0;
 	if(Timer1RunningFlag)
 	{
 		analogIn = ADC_In();
-		sprintf(temp,"\r\nDecimal: %u",analogIn);
+//		sprintf(temp,"\r\nDecimal: %u",analogIn);
+//		uart0_put(temp);
+//		sprintf(temp,"\r\nHexadecimal: %x",analogIn);
+//		uart0_put(temp);
+//		uart0_put("\r\n");
+		voltage = analogIn*(3.3/16383.0);
+		temperatureC = (voltage - 0.75)*100.0;
+		temperatureF = (temperatureC*9.0/5.0) + 32.0;
+		sprintf(temp,"\r\nTemperature: %f \xC2\xB0 C",temperatureC);
 		uart0_put(temp);
+		sprintf(temp,"\r\nTemperature: %f \xC2\xB0 F",temperatureF);
+		uart0_put(temp);
+		uart0_put("\r\n\r\n");
 	}
 }
 
