@@ -115,10 +115,10 @@ void ADC0_InitSWTriggerCh6(void)
 	// 8) analog mode on A6, P4.7
 	// set pins for ADC A6
 	// SEL0, SEL1
-  P4->DIR &= ~BIT6;
-  P4->SEL0 &= ~BIT6;
-	P4->SEL1 |= BIT6;
-  P4MAP->PMAP_REGISTER6 = PM_ANALOG;                   
+  P4->DIR &= ~BIT7;
+  P4->SEL0 &= ~BIT7;
+	P4->SEL1 |= BIT7;
+  P4MAP->PMAP_REGISTER7 = PM_ANALOG;                   
 
 	
 	// 9) enable
