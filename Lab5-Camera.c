@@ -104,7 +104,7 @@ int main(void)
 	// remember that we double the desired frequency because we need to account
 	// for the toggle from hi to low.
 	//
-	Output_MCLK();
+	//Output_MCLK();
 	uart0_put("\r\nINIT Camera CLK and SI\r\n");
 	uart0_put("\r\nINIT ADC\r\n");	
 	INIT_Camera();
