@@ -13,7 +13,7 @@ extern uint32_t SystemCoreClock;
 
 // default SI integration time is 7.5ms = 133Hz
 //
-#define INTEGRATION_TIME .0075f
+#define INTEGRATION_TIME .02f
 
 
 
@@ -32,8 +32,8 @@ extern uint32_t SystemCoreClock;
 unsigned long tempCounter = 0;
 static long pixelCounter = 0;
 
-extern uint16_t line[128];
-extern BOOLEAN g_sendData;
+uint16_t line[128];
+BOOLEAN g_sendData;
 
 
 ////////////////////////////////////////////
@@ -77,7 +77,7 @@ void ControlPin_SI_Init()
 	P5->SEL0 &= ~SI;
 	P5->SEL1 &= ~SI;
 	LED1_Init();
-	P5->DS |= SI;
+	P5->DS &= ~SI;
 	P5->DIR |= SI;
 	P5->OUT &= ~SI;
     // start Timer
@@ -98,7 +98,7 @@ void ControlPin_CLK_Init()
 	// initialize P5.4 and make it output (P5.4 CLK Pin)
 	P5->SEL0 &= ~CLK;
 	P5->SEL1 &= ~CLK;
-	P5->DS |= CLK;
+	P5->DS &= ~CLK;
 	P5->DIR |= CLK;
 	P5->OUT &= ~CLK;
 
