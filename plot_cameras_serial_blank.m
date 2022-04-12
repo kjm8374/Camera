@@ -19,7 +19,7 @@
 function plot_cameras_serial_blank 
 
 %Send over bluetooth or serial
-serialPort = 'COM3';
+serialPort = 'COM7';
 serialObject = serial(serialPort);
 %configure serial connection
 serialObject.BaudRate = 9600; %(Default)
@@ -74,22 +74,21 @@ end %plot_cams
 
 function plotdata(trace, cam, bintrace)
 drawnow;
-subplot(4,2,cam);
+subplot(3,1,cam);
 %figure(figureHandle);
 plot(trace);
+title('Raw Trace');
+ylabel('ADC Raw value');
 %set(figureHandle,'Visible','on');
 
 %SMOOTH AND PLOT
 %smoothtrace = trace;
 smoothtrace = movmean(trace,5);
-%for i = 2:127
-    %5-point Averager
-    %INSERT CODE
-    
-%end;
-subplot(4,2,cam+2);
+subplot(3,1,cam+1);
 %figure(smoothhand);
 plot(smoothtrace);
+title('Filtered Trace');
+ylabel('ADC Filtered value');
 
 %THRESHOLD
 %calculate 1's and 0's via thresholding
@@ -102,9 +101,12 @@ for i = 1:128
     end    
 end
 drawnow;
-subplot(4,2,cam+4);
+subplot(3,1,cam+2);
 %figure(binfighand);
 plot(bintrace);
+title('Binary Trace');
+xlabel('No. of data points');
+ylabel('ADC Binary value');
 
 end %function
 

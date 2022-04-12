@@ -49,20 +49,14 @@ void Timer32_1_ISR(void)
 	double temperatureF = 0.0;
 	if(Timer1RunningFlag)
 	{
+		uart0_put("Here\r\n");
 		analogIn = ADC_In();
-//		sprintf(temp,"\r\nDecimal: %u",analogIn);
-//		uart0_put(temp);
-//		sprintf(temp,"\r\nHexadecimal: %x",analogIn);
-//		uart0_put(temp);
-//		uart0_put("\r\n");
-		voltage = analogIn*(3.3/16383.0);
-		temperatureC = (voltage - 0.75)*100.0;
-		temperatureF = (temperatureC*9.0/5.0) + 32.0;
-		sprintf(temp,"\r\nTemperature: %f \xC2\xB0 C",temperatureC);
+		voltage = (analogIn)*(3.3/16383);
+		sprintf(temp,"\r\nVoltage: %f",voltage);
 		uart0_put(temp);
-		sprintf(temp,"\r\nTemperature: %f \xC2\xB0 F",temperatureF);
-		uart0_put(temp);
-		uart0_put("\r\n\r\n");
+		sprintf(temp,"\r\nHexadecimal: %x",analogIn);
+		uart0_put(temp); 
+		uart0_put("\r\n");
 	}
 }
 
@@ -118,7 +112,7 @@ int main(void)
 	uart0_init();
 	uart0_put("\r\nLab5 ADC demo\r\n");
 	
-	Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1);
+	Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/10, T32DIV1);
 
 	
 
